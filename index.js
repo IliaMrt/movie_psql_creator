@@ -1,18 +1,15 @@
-const express = require('express');
-const PORT = process.env.PORT || 8000;
-const app = express();
-const userRouter = require('./routes/user.routes');
-const postRouter=require('./routes/post.routes');
+const Pool = require('pg').Pool;
+const fs = require('fs');
+const sql = fs.readFileSync('./database.sql').toString();
+const filling = fs.readFileSync('./filling.sql').toString();
 
+const pool = new Pool({
+    user: 'postgres',
+    password: '123456',
+    host: 'localhost',
+    port: 5432,
+    database: 'moviesdb'
+});
 
-app.use(express.json());
-//app.use('/api', ()=>console.log(express.query ));
- app.use('/api', userRouter);
- app.use('/api', postRouter);
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-/*
-app.get('/',(req,res,)=>{
-    res.send('Hel1lo')
-})
-*/
-
+pool.query(sql);
+pool.query(filling);
